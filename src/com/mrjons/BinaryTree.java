@@ -12,6 +12,22 @@ public class BinaryTree {
      */
     protected Node currentNode;
 
+    /**
+     * Traverse Tree until value matches Node value or Node is null.
+     * Once one of those cases are met return Node (null if not found).
+     *
+     * @param value
+     * @return Node
+     */
+    public Node search(int value) {
+        this.currentNode = this.head;
+
+        while (this.currentNode != null && this.currentNode.value != value) {
+            this.currentNode = value > this.currentNode.value ? this.currentNode.right : this.currentNode.left;
+        }
+
+        return this.currentNode;
+    };
 
     /**
      * Traverse tree based on passed value until node in direction of travel is null.
