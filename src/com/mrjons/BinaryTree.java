@@ -62,5 +62,26 @@ public class BinaryTree {
         return this.currentNode;
     };
 
+    /**
+     * Process from left-most node, to center node, to current node.
+     *
+     * Gets tree values in ascending order.
+     *
+     * @param node
+     */
+    public void inOrderTraverse(Node node) {
+        if (node.left != null) {
+            this.inOrderTraverse(node.left);
+        }
+
+        this.processNode(node);
+
+        if (node.right != null) {
+            this.inOrderTraverse(node.right);
+        }
+
+        return;
+    }
+
 }
 
