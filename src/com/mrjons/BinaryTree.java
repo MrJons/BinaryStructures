@@ -63,6 +63,11 @@ public class BinaryTree {
     };
 
     /**
+     * Search for given value, if found remove from tree & reconnect now separated branches.
+     */
+    public void delete(int value) {};
+
+    /**
      * Process from left-most node, to center node, to current node.
      *
      * Gets tree values in ascending order.
@@ -83,5 +88,47 @@ public class BinaryTree {
         return;
     }
 
+    /**
+     * Reset current Node position to Head.
+     */
+    protected void resetCurrentNodeToHead() {
+        this.currentNode = this.head;
+    }
+
+    /**
+     * Simply print out Node value.
+     *
+     * @param node
+     */
+    protected void processNode(Node node) {
+        System.out.printf("proccessed %d %n", node.value);
+    }
+
+    /**
+     * If left Node reference is not null, update current node to be left node.
+     */
+    protected void traverseLeft() {
+        if (this.currentNode.left != null) {
+            this.currentNode = this.currentNode.left;
+        }
+    }
+
+    /**
+     * If right Node reference is not null, update current node to be left node.
+     */
+    protected void traverseRight() {
+        if (this.currentNode.right != null) {
+            this.currentNode = this.currentNode.right;
+        }
+    }
+
+    /**
+     * Getter for Node at top of tree.
+     *
+     * @return Node
+     */
+    protected Node getHead() {
+        return this.head;
+    }
 }
 
