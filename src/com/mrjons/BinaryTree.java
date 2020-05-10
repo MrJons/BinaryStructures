@@ -9,7 +9,7 @@ public class BinaryTree {
 
     /**
      * Traverse Tree until value matches Node value or Node is null.
-     * Once one of those cases are met return Node (null if not found).
+     * Once one of those cases are met return Node (Error thrown if not found).
      *
      * @param value
      * @return Node
@@ -48,11 +48,7 @@ public class BinaryTree {
             currentNode = new Node(value, parentNode);
 
             if (parentNode != null) {
-                if (currentNode.value > parentNode.value) {
-                    parentNode.right = currentNode;
-                } else {
-                    parentNode.left = currentNode;
-                }
+                this.reassignParentsChild(currentNode, currentNode);
             } else {
                 this.head = currentNode;
             }
@@ -165,19 +161,19 @@ public class BinaryTree {
     /**
      * Null all Node references in passed in node.
      *
-     * @param toDelete
+     * @param node
      */
-    protected void removeNodeReferences(Node toDelete) {
-        toDelete.parent = null;
-        toDelete.left   = null;
-        toDelete.right  = null;
+    protected void removeNodeReferences(Node node) {
+        node.parent = null;
+        node.left   = null;
+        node.right  = null;
     }
 
-    private void reassignParentsChild(Node toDelete, Node newChild) {
-        if (toDelete.value > toDelete.parent.value) {
-            toDelete.parent.right = newChild;
+    private void reassignParentsChild(Node currentNode, Node newChild) {
+        if (currentNode.value > currentNode.parent.value) {
+            currentNode.parent.right = newChild;
         } else {
-            toDelete.parent.left = newChild;
+            currentNode.parent.left = newChild;
         }
     }
 
