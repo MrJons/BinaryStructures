@@ -14,11 +14,15 @@ public class BinaryTree {
      * @param value
      * @return Node
      */
-    public Node search(int value) {
+    public Node search(int value) throws Exception {
         Node currentNode = this.head;
 
         while (currentNode != null && currentNode.value != value) {
             currentNode = value > currentNode.value ? currentNode.right : currentNode.left;
+        }
+
+        if (currentNode == null) {
+            throw new Exception("Value not in tree", null);
         }
 
         return currentNode;
@@ -59,8 +63,54 @@ public class BinaryTree {
 
     /**
      * Search for given value, if found remove from tree & reconnect now separated branches.
+     *
+     * @param value
      */
-    public void delete(int value) {};
+    public void delete(int value) throws Exception {
+
+        Node toDelete = this.search(value);
+
+        // if no children, just delete.
+        if (toDelete.left == null && toDelete.right == null) {
+            this.reassignParentsChild(toDelete, null);
+            this.removeNodeReferences(toDelete);
+        }
+
+        // if left child with no right child. promote left child
+        if (toDelete.left != null && toDelete.right == null) {
+            this.reassignParentsChild(toDelete, toDelete.left);
+            toDelete.left.parent = toDelete.parent;
+            this.removeNodeReferences(toDelete);
+        }
+
+        // if right child with left child, promote right childs left most child
+        if (toDelete.left == null && toDelete.right != null && toDelete.right.left != null) {
+            Node leftmostNode = toDelete.right.left;
+            while (leftmostNode.left != null) {
+                leftmostNode = leftmostNode.left;
+            }
+
+            // Ensure we arent severing any children of the leftmost node
+            if (leftmostNode.right != null) {
+                leftmostNode.right.parent = leftmostNode.parent;
+                this.reassignParentsChild(leftmostNode, leftmostNode.right);
+            } else {
+                this.reassignParentsChild(leftmostNode, null);
+            }
+
+            this.reassignParentsChild(toDelete, leftmostNode);
+            toDelete.right.parent = leftmostNode;
+            leftmostNode.right = toDelete.right; // assign right tree to promoted node..
+            this.removeNodeReferences(toDelete);
+        }
+
+        // if right child with no left child promote right child.
+        if (toDelete.left == null && toDelete.right != null) {
+            this.reassignParentsChild(toDelete, toDelete.right);
+            toDelete.right.parent = toDelete.parent;
+            this.removeNodeReferences(toDelete);
+        }
+    }
 
     /**
      * Process from left-most node, to center node, to right node.
@@ -110,6 +160,25 @@ public class BinaryTree {
             currentNode = currentNode.right;
         }
         return currentNode;
+    }
+
+    /**
+     * Null all Node references in passed in node.
+     *
+     * @param toDelete
+     */
+    protected void removeNodeReferences(Node toDelete) {
+        toDelete.parent = null;
+        toDelete.left   = null;
+        toDelete.right  = null;
+    }
+
+    private void reassignParentsChild(Node toDelete, Node newChild) {
+        if (toDelete.value > toDelete.parent.value) {
+            toDelete.parent.right = newChild;
+        } else {
+            toDelete.parent.left = newChild;
+        }
     }
 
     /**
