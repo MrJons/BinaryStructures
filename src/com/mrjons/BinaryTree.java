@@ -8,11 +8,6 @@ public class BinaryTree {
     protected Node head = null;
 
     /**
-     * Set during traversal to mark current Node
-     */
-    protected Node currentNode;
-
-    /**
      * Traverse Tree until value matches Node value or Node is null.
      * Once one of those cases are met return Node (null if not found).
      *
@@ -20,13 +15,13 @@ public class BinaryTree {
      * @return Node
      */
     public Node search(int value) {
-        this.currentNode = this.head;
+        Node currentNode = this.head;
 
-        while (this.currentNode != null && this.currentNode.value != value) {
-            this.currentNode = value > this.currentNode.value ? this.currentNode.right : this.currentNode.left;
+        while (currentNode != null && currentNode.value != value) {
+            currentNode = value > currentNode.value ? currentNode.right : currentNode.left;
         }
 
-        return this.currentNode;
+        return currentNode;
     };
 
     /**
@@ -37,29 +32,29 @@ public class BinaryTree {
      * @return Node
      */
     public Node insert(int value) {
-        this.currentNode = this.head;
+        Node currentNode = this.head;
 
         Node parentNode = null;
-        while (this.currentNode != null && this.currentNode.value != value) {
-            parentNode = this.currentNode;
-            this.currentNode = value > this.currentNode.value ? this.currentNode.right : this.currentNode.left;
+        while (currentNode != null && currentNode.value != value) {
+            parentNode = currentNode;
+            currentNode = value > currentNode.value ? currentNode.right : currentNode.left;
         }
 
-        if (this.currentNode == null) {
-            this.currentNode = new Node(value, parentNode);
+        if (currentNode == null) {
+            currentNode = new Node(value, parentNode);
 
             if (parentNode != null) {
-                if (this.currentNode.value > parentNode.value) {
-                    parentNode.right = this.currentNode;
+                if (currentNode.value > parentNode.value) {
+                    parentNode.right = currentNode;
                 } else {
-                    parentNode.left = this.currentNode;
+                    parentNode.left = currentNode;
                 }
             } else {
-                this.head = this.currentNode;
+                this.head = currentNode;
             }
         }
 
-        return this.currentNode;
+        return currentNode;
     };
 
     /**
@@ -68,7 +63,7 @@ public class BinaryTree {
     public void delete(int value) {};
 
     /**
-     * Process from left-most node, to center node, to current node.
+     * Process from left-most node, to center node, to right node.
      *
      * Gets tree values in ascending order.
      *
@@ -89,13 +84,6 @@ public class BinaryTree {
     }
 
     /**
-     * Reset current Node position to Head.
-     */
-    protected void resetCurrentNodeToHead() {
-        this.currentNode = this.head;
-    }
-
-    /**
      * Simply print out Node value.
      *
      * @param node
@@ -107,19 +95,21 @@ public class BinaryTree {
     /**
      * If left Node reference is not null, update current node to be left node.
      */
-    protected void traverseLeft() {
-        if (this.currentNode.left != null) {
-            this.currentNode = this.currentNode.left;
+    protected Node traverseLeft(Node currentNode) {
+        if (currentNode.left != null) {
+            currentNode = currentNode.left;
         }
+        return currentNode;
     }
 
     /**
      * If right Node reference is not null, update current node to be left node.
      */
-    protected void traverseRight() {
-        if (this.currentNode.right != null) {
-            this.currentNode = this.currentNode.right;
+    protected Node traverseRight(Node currentNode) {
+        if (currentNode.right != null) {
+            currentNode = currentNode.right;
         }
+        return currentNode;
     }
 
     /**
